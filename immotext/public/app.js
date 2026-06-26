@@ -1,7 +1,7 @@
 // CONFIGURAZIONE SUPABASE (Sostituisci con le tue chiavi reali)
 const SUPABASE_URL = "https://ythbvncnrklztxkgaiqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0aGJ2bmNucmtsenR4a2dhaXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTk1NzYsImV4cCI6MjA5Nzk5NTU3Nn0.e_0NMm-jrXctHlrfJTkz-HxI-yh8asCp7aftmSYz6ow";
-const supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
 function toggleForm() {
     document.getElementById('login-form').classList.toggle('hidden');
