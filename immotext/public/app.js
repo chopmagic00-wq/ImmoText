@@ -1,8 +1,9 @@
-// CONFIGURAZIONE SUPABASE (Sostituisci con le tue chiavi reali)
+// CONFIGURAZIONE SUPABASE
 const SUPABASE_URL = "https://ythbvncnrklztxkgaiqo.supabase.co";
 const SUPABASE_KEY = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inl0aGJ2bmNucmtsenR4a2dhaXFvIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODI0MTk1NzYsImV4cCI6MjA5Nzk5NTU3Nn0.e_0NMm-jrXctHlrfJTkz-HxI-yh8asCp7aftmSYz6ow";
 const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
+// Switch tra form di Login e Registrazione
 function toggleForm() {
     document.getElementById('login-form').classList.toggle('hidden');
     document.getElementById('register-form').classList.toggle('hidden');
@@ -12,6 +13,9 @@ function toggleForm() {
 async function login() {
     const email = document.getElementById('email').value;
     const password = document.getElementById('password').value;
+    
+    if (!email || !password) return alert("Inserisci email e password!");
+
     const { data, error } = await supabase.auth.signInWithPassword({ email, password });
     
     if (error) return alert("Errore di accesso: " + error.message);
@@ -22,6 +26,9 @@ async function login() {
 async function registrati() {
     const email = document.getElementById('reg-email').value;
     const password = document.getElementById('reg-password').value;
+    
+    if (!email || !password) return alert("Compila tutti i campi!");
+
     const { data, error } = await supabase.auth.signUp({ email, password });
     
     if (error) return alert("Errore di registrazione: " + error.message);
@@ -70,14 +77,13 @@ async function caricaProgetti() {
     });
 }
 
-// 5. CREA NUOVO PROGETTO (Limite 15 progetti per piano 9.99€)
+// 5. CREA NUOVO PROGETTO
 async function creaNuovoProgetto() {
     const titolo = prompt("Inserisci un nome identificativo per l'immobile (es. Attico Centro):");
     if (!titolo) return;
 
     const { data: { user } } = await supabase.auth.getUser();
 
-    // Controllo limite piano base
     const { count } = await supabase.from('progetti').select('*', { count: 'exact', head: true }).eq('user_id', user.id);
     if (count >= 15) {
         return alert("Hai raggiunto il limite di 15 immobili del tuo Piano Base (9,99€).");
@@ -131,10 +137,8 @@ async function salvaEGeneraTesto() {
 
     document.getElementById('btn-genera').innerText = "⚡ Generazione in corso...";
     
-    // Aggiorna dati su Supabase
     await supabase.from('progetti').update({ metri_quadri: mq, stanze, zona, note_extra: note }).eq('id', id);
 
-    // Chiama il backend Express per simulare l'AI
     try {
         const response = await fetch('/api/genera', {
             method: 'POST',
@@ -143,14 +147,13 @@ async function salvaEGeneraTesto() {
         });
         const data = await response.json();
         
-        // Salva testo finale su Supabase
         await supabase.from('progetti').update({ descrizione_ai: data.text }).eq('id', id);
         
         document.getElementById('output-ai').innerText = data.text;
         document.getElementById('output-ai').classList.remove('italic');
     } catch (e) {
         alert("Errore nella generazione del testo.");
-    } finally {
+    } finaly {
         document.getElementById('btn-genera').innerText = "✨ Genera Descrizione con AI";
     }
 }
