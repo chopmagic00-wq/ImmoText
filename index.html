@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ImmoText - AI Real Estate Suite</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Lucide Icons -->
+    <script src="https://unpkg.com/lucide@latest"></script>
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans h-screen flex overflow-hidden">
+
+    <!-- 1. SIDEBAR -->
+    <aside class="w-72 bg-slate-900 border-r border-slate-800 flex flex-col justify-between hidden md:flex">
+        <div>
+            <div class="p-5 border-b border-slate-800 flex items-center gap-3">
+                <div class="bg-indigo-600 p-2 rounded-xl text-white">
+                    <i data-lucide="sparkles" class="w-5 h-5"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide">ImmoText</h1>
+                    <span class="text-xs text-indigo-400 font-medium">AI Real Estate Suite</span>
+                </div>
+            </div>
+
+            <div class="p-4">
+                <button onclick="newChat()" class="w-full bg-indigo-600 hover:bg-indigo-500 text-white font-medium py-2.5 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/20">
+                    <i data-lucide="plus" class="w-4 h-4"></i> Nuova Descrizione
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- 2. MAIN CONTENT -->
+    <main class="flex-1 flex flex-col h-full overflow-hidden bg-slate-950">
+        <header class="h-16 border-b border-slate-800 px-6 flex items-center justify-between bg-slate-900/50 backdrop-blur">
+            <h2 class="font-semibold text-slate-200 flex items-center gap-2">
+                <i data-lucide="building-2" class="w-5 h-5 text-indigo-400"></i> Generatore Intelligente per Annunci
+            </h2>
+        </header>
+
+        <div class="flex-1 overflow-y-auto p-6 grid grid-cols-1 lg:grid-cols-2 gap-6">
+            
+            <!-- FORM INPUT -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl">
+                <form id="generator-form" onsubmit="generateText(event)" class="space-y-4">
+                    <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400 mb-2">1. Parametri e Stile dell'Annuncio</h3>
+                    
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Tipologia Immobile</label>
+                        <select id="property-type" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition">
+                            <option>Appartamento</option>
+                            <option>Villa / Villetta</option>
+                            <option>Attico</option>
+                            <option>Locale Commerciale / Ufficio</option>
+                        </select>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Prezzo (€)</label>
+                            <input type="text" id="price" placeholder="es. 250.000" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Superficie (Mq)</label>
+                            <input type="text" id="sqm" placeholder="es. 110" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition">
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Modalità di Scrittura</label>
+                            <select id="writing-mode" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition">
+                                <option value="Emozionale e Lusso">🌟 Emozionale / Lusso</option>
+                                <option value="Tecnico e Dettagliato">💼 Tecnico / Commerciale</option>
+                                <option value="Social Media (Breve e con Emoji)">📱 Social Media (Instagram/FB)</option>
+                            </select>
+                        </div>
+                        <div>
+                            <label class="block text-xs font-medium text-slate-400 mb-1">Target di Riferimento</label>
+                            <select id="target-audience" class="w-full bg-slate-950 border border-slate-800 rounded-xl px-3 py-2.5 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition">
+                                <option value="Famiglie con figli">👨‍👩‍👧 Famiglie</option>
+                                <option value="Investitori (Messa a reddito)">📈 Investitori</option>
+                                <option value="Coppie giovani">💑 Giovani Coppie</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-medium text-slate-400 mb-1">Punti di Forza / Dettagli Extra</label>
+                        <textarea id="features" rows="3" placeholder="es. Terrazzo panoramico, ristrutturato..." class="w-full bg-slate-950 border border-slate-800 rounded-xl p-3 text-sm text-slate-200 focus:outline-none focus:border-indigo-500 transition resize-none"></textarea>
+                    </div>
+
+                    <button type="submit" class="w-full bg-gradient-to-r from-indigo-600 to-purple-600 hover:from-indigo-500 hover:to-purple-500 text-white font-medium py-3 px-4 rounded-xl flex items-center justify-center gap-2 transition shadow-lg shadow-indigo-600/25 mt-2">
+                        <i data-lucide="sparkles" class="w-4 h-4"></i> Genera Annuncio Avanzato
+                    </button>
+                </form>
+            </div>
+
+            <!-- OUTPUT -->
+            <div class="bg-slate-900/80 border border-slate-800 rounded-2xl p-6 flex flex-col justify-between shadow-xl">
+                <div>
+                    <div class="flex items-center justify-between mb-4">
+                        <h3 class="text-sm font-bold uppercase tracking-wider text-indigo-400">2. Risultato Ottimizzato</h3>
+                        <button onclick="copyText()" id="copy-btn" class="hidden bg-slate-800 hover:bg-slate-700 text-slate-200 text-xs font-medium px-3 py-1.5 rounded-lg flex items-center gap-1.5 transition">
+                            <i data-lucide="copy" class="w-3.5 h-3.5"></i> Copia Testo
+                        </button>
+                    </div>
+
+                    <div id="output-box" class="bg-slate-950 border border-slate-800 rounded-xl p-4 h-[380px] overflow-y-auto text-sm text-slate-300 leading-relaxed whitespace-pre-wrap flex flex-col items-center justify-center text-slate-600 text-center">
+                        <i data-lucide="compass" class="w-10 h-10 mb-2 stroke-1"></i>
+                        <p>Compila i parametri a sinistra e clicca su "Genera Annuncio Avanzato"</p>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+<script>
+        lucide.createIcons();
+
+        async function generateText(e) {
+            e.preventDefault();
+            const propertyType = document.getElementById('property-type').value;
+            const price = document.getElementById('price').value;
+            const sqm = document.getElementById('sqm').value;
+            const writingMode = document.getElementById('writing-mode').value;
+            const targetAudience = document.getElementById('target-audience').value;
+            const features = document.getElementById('features').value;
+
+            const outputBox = document.getElementById('output-box');
+            outputBox.className = "bg-slate-950 border border-slate-800 rounded-xl p-4 h-[380px] overflow-y-auto text-sm text-slate-300 leading-relaxed whitespace-pre-wrap text-left";
+            outputBox.innerHTML = "Generazione in corso con Google Gemini...";
+
+            try {
+                const response = await fetch('/api/generate', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ propertyType, price, sqm, writingMode, targetAudience, features })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    outputBox.innerText = data.text;
+                    document.getElementById('copy-btn').classList.remove('hidden');
+                } else {
+                    outputBox.innerText = "Errore: " + (data.error || "Impossibile generare il testo.");
+                }
+            } catch (err) {
+                outputBox.innerText = "Errore di connessione al server.";
+            }
+        }
+
+        function copyText() {
+            const text = document.getElementById('output-box').innerText;
+            navigator.clipboard.writeText(text);
+        }
+
+        // AGGIUNGI QUESTA FUNZIONE MANCANTE:
+        function newChat() {
+            document.getElementById('generator-form').reset();
+            const outputBox = document.getElementById('output-box');
+            outputBox.className = "bg-slate-950 border border-slate-800 rounded-xl p-4 h-[380px] overflow-y-auto text-sm text-slate-300 leading-relaxed whitespace-pre-wrap flex flex-col items-center justify-center text-slate-600 text-center";
+            outputBox.innerHTML = `<i data-lucide="compass" class="w-10 h-10 mb-2 stroke-1"></i><p>Compila i parametri a sinistra e clicca su "Genera Annuncio Avanzato"</p>`;
+            document.getElementById('copy-btn').classList.add('hidden');
+            lucide.createIcons();
+        }
+    </script>
+</body>
+</html>
